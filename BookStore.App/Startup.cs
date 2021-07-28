@@ -16,6 +16,7 @@ namespace BookStore.App
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,16 +26,60 @@ namespace BookStore.App
             {
                 app.UseDeveloperExceptionPage();
             }
+            //1st way : 
+            if(env.EnvironmentName == "Developement")
+            {
+
+            }
+            //2nd way : 
+            if (env.IsDevelopment())
+            {
+
+            }
+            //3rd way
+            if(env.IsEnvironment("Dev"))
+            {
+
+            }
+
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("This is the first middleware");
+            //    await next();
+            //    await context.Response.WriteAsync("This is the first middleware response");
+            //});
+
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("This is the second middleware");
+            //    await next();
+            //    await context.Response.WriteAsync("This is the second middleware response");
+            //});
+
+            //app.Use(async (context, next) =>
+            //{
+            //    await context.Response.WriteAsync("This is the third middleware");
+            //    await next();
+            //});
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World Prajna DASH!");
-                });
+                //endpoints.MapGet("/", async context =>
+                //{
+                //    await context.Response.WriteAsync("Hello World Prajna DASH!");
+                //});
+                endpoints.MapDefaultControllerRoute();
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapGet("/about", async context =>
+            //    {
+            //        await context.Response.WriteAsync("Hello World from about us page");
+            //    });
+            //});
         }
     }
 }
