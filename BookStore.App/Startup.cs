@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +19,9 @@ namespace BookStore.App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+#if DEBUG
+            services.AddRazorPages().AddRazorRuntimeCompilation();
+#endif 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,42 +31,12 @@ namespace BookStore.App
             {
                 app.UseDeveloperExceptionPage();
             }
-            //1st way : 
-            if(env.EnvironmentName == "Developement")
-            {
-
-            }
-            //2nd way : 
-            if (env.IsDevelopment())
-            {
-
-            }
-            //3rd way
-            if(env.IsEnvironment("Dev"))
-            {
-
-            }
-
-            //app.Use(async (context, next) =>
+            app.UseStaticFiles();
+            //app.UseStaticFiles(new StaticFileOptions()
             //{
-            //    await context.Response.WriteAsync("This is the first middleware");
-            //    await next();
-            //    await context.Response.WriteAsync("This is the first middleware response");
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "MyStaticFiles")),
+            //    RequestPath = "/MyStaticFiles"
             //});
-
-            //app.Use(async (context, next) =>
-            //{
-            //    await context.Response.WriteAsync("This is the second middleware");
-            //    await next();
-            //    await context.Response.WriteAsync("This is the second middleware response");
-            //});
-
-            //app.Use(async (context, next) =>
-            //{
-            //    await context.Response.WriteAsync("This is the third middleware");
-            //    await next();
-            //});
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -71,15 +46,10 @@ namespace BookStore.App
                 //    await context.Response.WriteAsync("Hello World Prajna DASH!");
                 //});
                 endpoints.MapDefaultControllerRoute();
+                //endpoints.MapControllerRoute(
+                //    name: "Default",
+                //    pattern: "demo/{controller=Home}/{action=Index}/{id?}");
             });
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapGet("/about", async context =>
-            //    {
-            //        await context.Response.WriteAsync("Hello World from about us page");
-            //    });
-            //});
         }
     }
 }
